@@ -1,4 +1,4 @@
-# Sms Service 
+# Implemented tech or tools
   - Spring Framework
   - Redis
   - RabbitMq
