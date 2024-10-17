@@ -28,35 +28,52 @@ public class RabbitMqConfig {
 
 
     // Creating a queue for Auth Service
-    @Bean("authDirectQueue")
-    public Queue AuthQueue() {
-        return new Queue(RabbitMqKeys.AUTH_QUEUE,true);
+    @Bean("authDirectRedisQueue")
+    public Queue RedisAuthQueue() {
+        return new Queue(RabbitMqKeys.AUTH_QUEUE_REDIS,true);
     }
+
+    // Creating a queue for Auth Service
+    @Bean("authDirectMongoQueue")
+    public Queue MongoAuthQueue() {
+        return new Queue(RabbitMqKeys.AUTH_QUEUE_MONGO,true);
+    }
+
 
 
     // Creating a queue for Auth Service
-    @Bean("authDelayQueue")
+    @Bean("authDelayMongoQueue")
     public Queue DelayAuthQueue() {
-        return new Queue(RabbitMqKeys.AUTH_DELAY_QUEUE,true);
+        return new Queue(RabbitMqKeys.AUTH_DELAY_QUEUE_MONGO,true);
     }
 
     // Binding the authDirectQueue to directExchange through the routing key
-    @Bean("authDirectBinding")
-    public Binding bindingDirectAuth(@Qualifier("authDirectQueue")Queue queue, @Qualifier("directExchange") Exchange exchange) {
+    @Bean("authDirectBindingRedis")
+    public Binding bindingRedisDirectAuth(@Qualifier("authDirectRedisQueue")Queue queue, @Qualifier("directExchange") Exchange exchange) {
         return BindingBuilder
                 .bind(queue)
                 .to(exchange)
-                .with(RabbitMqKeys.AUTH_ROUTING_KEY)
+                .with(RabbitMqKeys.AUTH_REDIS_ROUTING_KEY)
+                .noargs();
+    }
+
+    // Binding the authDirectQueue to directExchange through the routing key
+    @Bean("authDirectBindingMongo")
+    public Binding bindingMongoDirectAuth(@Qualifier("authDirectMongoQueue")Queue queue, @Qualifier("directExchange") Exchange exchange) {
+        return BindingBuilder
+                .bind(queue)
+                .to(exchange)
+                .with(RabbitMqKeys.AUTH_MONGO_ROUTING_KEY)
                 .noargs();
     }
 
     // Binding the authDirectQueue to directExchange through the routing key
     @Bean("authDelayBinding")
-    public Binding bindingDelayAuth(@Qualifier("authDelayQueue")Queue queue, @Qualifier("delayExchange") Exchange exchange) {
+    public Binding bindingDelayAuth(@Qualifier("authDelayMongoQueue")Queue queue, @Qualifier("delayExchange") Exchange exchange) {
         return BindingBuilder
                 .bind(queue)
                 .to(exchange)
-                .with(RabbitMqKeys.AUTH_ROUTING_KEY)
+                .with(RabbitMqKeys.AUTH_MONGO_ROUTING_KEY)
                 .noargs();
     }
 }

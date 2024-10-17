@@ -1,8 +1,10 @@
 package com.side.auth.service;
 
 import com.side.auth.entities.SmsParam;
+import com.side.auth.serviceImpl.MongoAuthServiceImpl;
+
 /**
- * @see com.side.auth.serviceImpl.AuthServiceImpl
+ * @see MongoAuthServiceImpl
  * **/
 public interface AuthService {
 

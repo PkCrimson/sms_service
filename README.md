@@ -6,7 +6,8 @@
   - RabbitMq
   - Aliyun SMS Service
 # API
-## /api/auth/sms/send
+## /api/auth/sms/send/{db}
+  - `Path:/{db}` = `redis` / `mongo` (Dependence which db to use)
   - `RequestBody`
     ```
     {
@@ -18,7 +19,8 @@
   - `Response`
       - `OK`
       - `Send SMS failed`
-## /api/auth/sms/verify
+## /api/auth/sms/verify/{db}
+- `Path:/{db}` = `redis` / `mongo` (Dependence which db to use)
   - `RequestBody`
       ```
       {
