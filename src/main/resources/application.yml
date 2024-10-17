@@ -19,6 +19,9 @@ spring:
           max-idle: 8     # Maximum idle connections, default 8
           min-idle: 0     # Minimum idle connection, default 0
 
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/
+
   rabbitmq:
     host: 127.0.0.1
     port: 5672
