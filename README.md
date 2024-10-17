@@ -2,6 +2,7 @@
   - Spring Framework
   - Maven
   - Redis
+  - MongoDB
   - RabbitMq
   - Aliyun SMS Service
 # API
