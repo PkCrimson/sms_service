@@ -11,6 +11,8 @@ import com.side.auth.utils.AliyunSMSUtil;
 import com.side.auth.utils.LoggerUtil;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -18,6 +20,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -96,11 +99,15 @@ public class AuthListener {
             AliyunSMSUtil.smsSender(smsParam);
 
             // Send delay message to queue for expiration of verification
+            MessageProperties properties = new MessageProperties();
+            properties.setHeader("x-delay", Duration.ofSeconds(120).toMillis());
             amqpTemplate.convertAndSend(
                     RabbitMqKeys.AUTH_DELAY_QUEUE,
                     RabbitMqKeys.AUTH_ROUTING_KEY,
-                    smsDocument.getId().getBytes());
-
+                    MessageBuilder
+                            .withBody(smsDocument.getId().getBytes())
+                            .andProperties(properties).build()
+            );
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
